@@ -1,15 +1,17 @@
 import Shuffle from "./utils";
 
-export type Questions = {
+
+
+export type Question = {
   category: string;
   correct_answer: string;
   difficulty: string;
-  incorrect_answer: string[];
-  questions: string;
+  incorrect_answers: string[];
+  question: string;
   type: string;
 };
 
-export type QuestionState = Questions & { answers: string[] };
+export type QuestionState = Question & { answers: string[] };
 
 enum Difficulty {
   EASY = "easy",
@@ -57,10 +59,10 @@ const fetchQuizQuestions = async (
 ) => {
   const endPoint = `https://opentdb.com/api.php?amount=${amount}&category=${questionCategory}&difficulty=${difficulty}&type=${questionType}`;
   const data = await (await fetch(endPoint)).json();
-  return data.results.map((question: Questions) => ({
+  return data.results.map((question: Question) => ({ 
     ...question,
-    answers: Shuffle([...question.incorrect_answer, question.correct_answer]),
-  }));
+    answers: Shuffle([...question.incorrect_answers, question.correct_answer])
+  }))
 };
 
 export { fetchQuizQuestions, Difficulty, QuestionType, QuestionCategory };
